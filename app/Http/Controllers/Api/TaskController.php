@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
-    // GET /api/task  -> tampilkan semua data
+
     public function index()
     {
         $data = Task::all();
@@ -20,7 +21,7 @@ class TaskController extends Controller
         ]);
     }
 
-    // POST /api/task  -> tambah data baru
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -32,6 +33,7 @@ class TaskController extends Controller
             'tersedia'  => 'boolean',
         ]);
 
+
         $task = Task::create($validated);
 
         return response()->json([
@@ -40,7 +42,7 @@ class TaskController extends Controller
         ], 201);
     }
 
-    // GET /api/task/{id}  -> tampilkan satu data
+  
     public function show($id)
     {
         $task = Task::findOrFail($id);
@@ -51,7 +53,7 @@ class TaskController extends Controller
         ]);
     }
 
-    // PUT/PATCH /api/task/{id}  -> ubah data
+
     public function update(Request $request, $id)
     {
         $task = Task::findOrFail($id);
@@ -63,7 +65,15 @@ class TaskController extends Controller
             'rasa'      => 'sometimes|required|string',
             'harga'     => 'sometimes|required|numeric',
             'tersedia'  => 'sometimes|boolean',
+            'gambar'    => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('gambar')) {
+            if ($task->gambar) {
+                Storage::disk('public')->delete($task->gambar);
+            }
+            $validated['gambar'] = $request->file('gambar')->store('kopi', 'public');
+        }
 
         $task->update($validated);
 
@@ -73,10 +83,15 @@ class TaskController extends Controller
         ]);
     }
 
-    // DELETE /api/task/{id}  -> hapus data
+
     public function destroy($id)
     {
         $task = Task::findOrFail($id);
+
+        if ($task->gambar) {
+            Storage::disk('public')->delete($task->gambar);
+        }
+
         $task->delete();
 
         return response()->json([

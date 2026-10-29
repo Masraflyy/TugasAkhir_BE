@@ -12,6 +12,7 @@ class Task extends Model
         'ukuran_ml',        
         'rasa', 
         'harga', 
-        'tersedia'
+        'tersedia',
+        'gambar'
     ];
 }
