@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $fillable = [
-        'title',
-        'description',
-        'is_completed',        
+        'nama',
+        'jenis',
+        'ukuran_ml',        
+        'rasa', 
+        'harga', 
+        'tersedia'
     ];
 }

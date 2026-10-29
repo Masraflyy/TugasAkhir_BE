@@ -9,81 +9,78 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    // GET /api/task  -> tampilkan semua data
     public function index()
     {
-        $tasks = Task::all();
+        $data = Task::all();
 
         return response()->json([
-            'message' => 'Daftar task berhasil diambil',
-            'data' => TaskResource::collection($tasks),
+            'message' => 'Kopi berhasil ditampilkan',
+            'data'    => TaskResource::collection($data),
         ]);
     }
 
+    // POST /api/task  -> tambah data baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'nama'      => 'required|string|max:255',
+            'jenis'     => 'required|string',
+            'ukuran_ml' => 'required|integer',
+            'rasa'      => 'required|string',
+            'harga'     => 'required|numeric',
+            'tersedia'  => 'boolean',
         ]);
 
         $task = Task::create($validated);
 
-        return response()->json($task, 201);
+        return response()->json([
+            'message' => 'Kopi berhasil ditambahkan',
+            'data'    => new TaskResource($task),
+        ], 201);
     }
 
+    // GET /api/task/{id}  -> tampilkan satu data
     public function show($id)
     {
-        $task = Task::find($id);
-
-        if (!$task) {
-            return response()->json([
-                'message' => 'Task tidak ditemukan',
-            ], 404);
-        }
+        $task = Task::findOrFail($id);
 
         return response()->json([
-            'message' => 'Detail task berhasil diambil',
-            'data' => new TaskResource($task),
-            ]);
+            'message' => 'Kopi berhasil ditampilkan',
+            'data'    => new TaskResource($task),
+        ]);
     }
 
+    // PUT/PATCH /api/task/{id}  -> ubah data
     public function update(Request $request, $id)
     {
-        $task = Task::find($id);
-
-        if (!$task) {
-            return response()->json([
-                'message' => 'Task tidak ditemukan',
-            ], 404);
-        }
+        $task = Task::findOrFail($id);
 
         $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'is_completed' => 'boolean',
+            'nama'      => 'sometimes|required|string|max:255',
+            'jenis'     => 'sometimes|required|string',
+            'ukuran_ml' => 'sometimes|required|integer',
+            'rasa'      => 'sometimes|required|string',
+            'harga'     => 'sometimes|required|numeric',
+            'tersedia'  => 'sometimes|boolean',
         ]);
 
         $task->update($validated);
 
         return response()->json([
-            'message' => 'Task berhasil diperbarui',
-            'data' => new TaskResource($task),
-        ]);            
+            'message' => 'Kopi berhasil diubah',
+            'data'    => new TaskResource($task),
+        ]);
     }
 
-    public function destroy($id){
-        $task = Task::find($id);
-        
-        if (!$task){
-        return response()->json([
-            'message' => 'Task tidak di temukan'
-        ], 404);
-        }
-
+    // DELETE /api/task/{id}  -> hapus data
+    public function destroy($id)
+    {
+        $task = Task::findOrFail($id);
         $task->delete();
 
         return response()->json([
-            'message'=> 'Task berhasil di hapus',
+            'message' => 'Kopi berhasil dihapus',
         ]);
     }
 }

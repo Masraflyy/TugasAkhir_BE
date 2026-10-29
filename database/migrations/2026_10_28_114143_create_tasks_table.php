@@ -14,9 +14,12 @@ return new class extends Migration
 
     Schema::create('tasks', function (Blueprint $table) {
         $table->id();
-        $table->string('title');
-        $table->text('description')->nullable();
-        $table->boolean('is_completed')->default(false);
+        $table->string('nama');
+        $table->string('jenis');            // contoh: arabika, robusta
+        $table->integer('ukuran_ml');
+        $table->string('rasa');
+        $table->decimal('harga', 10, 2);
+        $table->boolean('tersedia')->default(true);
         $table->timestamps();
     });
 }
