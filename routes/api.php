@@ -20,7 +20,7 @@ Route::get('/info', function () {
     ]);
 });
 
-Route::get('/tasks', [TaskController::class, 'kopi index']);
+Route::get('/tasks', [TaskController::class, 'index']);
 
 Route::post('/tasks', [TaskController::class, 'store']);
 
