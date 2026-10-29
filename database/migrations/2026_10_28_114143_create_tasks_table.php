@@ -15,7 +15,7 @@ return new class extends Migration
     Schema::create('tasks', function (Blueprint $table) {
         $table->id();
         $table->string('nama');
-        $table->string('jenis');            // contoh: arabika, robusta
+        $table->string('jenis');          
         $table->integer('ukuran_ml');
         $table->string('rasa');
         $table->decimal('harga', 10, 2);

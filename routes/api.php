@@ -14,9 +14,13 @@ Route::get('/hello', function () {
 
 Route::get('/info', function () {
     return response()->json([
-        'app' => 'Kopi Susu',
-        'version' => '1.0',
-        'author' => 'Kopi Mijen',
+        'Nama Cafe' => 'Kopi Saya Maju 57',
+        'Buka-Tutup' => '07.00-23.00',
+        'Lokasi ' => 'Depan Pintu Surga',
+        'Rating ' => '9.9/10',
+        'Tahun Berdiri' => '1955',
+        'Owner ' => 'Masrafly Ganteng',
+        'Fasilitas' => 'Free Wifi, Indoor Ac, 5 Bidadari Cantik , Parkir mobil & motor'
     ]);
 });
 
