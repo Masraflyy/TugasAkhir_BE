@@ -13,6 +13,7 @@ class KopiResource extends JsonResource
         'id'         => $this->id,
         'nama'       => $this->nama,
         'jenis'      => $this->jenis,
+        'image'      => $this->image,
         'ukuran_ml'  => $this->ukuran_ml,
         'rasa'       => $this->rasa,
         'harga'      => $this->harga,

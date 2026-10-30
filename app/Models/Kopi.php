@@ -14,7 +14,7 @@ class Kopi extends Model
         'rasa', 
         'harga', 
         'tersedia',
-        'gambar'
+        'image'
     ];
 }
 

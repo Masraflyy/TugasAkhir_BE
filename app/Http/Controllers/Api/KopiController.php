@@ -16,31 +16,36 @@ class KopiController extends Controller
         $data = Kopi::all();
 
         return response()->json([
-            'message' => 'Kopi berhasil ditampilkan',
-            'data'    => TaskResource::collection($data),
+            'message' => 'Menu Kopi berhasil ditampilkan Nihh',
+            'data'    => KopiResource::collection($data),
         ]);
     }
 
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nama'      => 'required|string|max:255',
-            'jenis'     => 'required|string',
-            'ukuran_ml' => 'required|integer',
-            'rasa'      => 'required|string',
-            'harga'     => 'required|numeric',
-            'tersedia'  => 'boolean',
+ public function store(Request $request)
+{
+    if ($request->has('tersedia')) {
+        $request->merge([
+            'tersedia' => filter_var($request->tersedia, FILTER_VALIDATE_BOOLEAN),
         ]);
-
-
-        $kopi = Kopi::create($validated);
-
-        return response()->json([
-            'message' => 'Kopi berhasil ditambahkan',
-            'data'    => new KopiResource($kopi),
-        ], 201);
     }
+
+    $validated = $request->validate([
+        'nama'      => 'required|string|max:255',
+        'jenis'     => 'required|string',
+        'ukuran_ml' => 'required|integer',
+        'rasa'      => 'required|string',
+        'harga'     => 'required|numeric',
+        'tersedia'  => 'boolean',
+    ]);
+
+    $kopi = Kopi::create($validated);
+
+    return response()->json([
+        'message' => 'Kopi berhasil ditambahkan',
+        'data'    => new KopiResource($kopi),
+    ], 201);
+}
 
   
     public function show($id)
@@ -55,33 +60,31 @@ class KopiController extends Controller
 
 
     public function update(Request $request, $id)
-    {
-        $kopi = Kopi::findOrFail($id);
+{
+    $kopi = Kopi::findOrFail($id);
 
-        $validated = $request->validate([
-            'nama'      => 'sometimes|required|string|max:255',
-            'jenis'     => 'sometimes|required|string',
-            'ukuran_ml' => 'sometimes|required|integer',
-            'rasa'      => 'sometimes|required|string',
-            'harga'     => 'sometimes|required|numeric',
-            'tersedia'  => 'sometimes|boolean',
-            'gambar'    => 'nullable|image|max:2048',
-        ]);
-
-        if ($request->hasFile('gambar')) {
-            if ($kopi->gambar) {
-                Storage::disk('public')->delete($kopi->gambar);
-            }
-            $validated['gambar'] = $request->file('gambar')->store('kopi', 'public');
-        }
-
-        $kopi->update($validated);
-
-        return response()->json([
-            'message' => 'Kopi berhasil diubah',
-            'data'    => new KopiResource($kopi),
+    if ($request->has('tersedia')) {
+        $request->merge([
+            'tersedia' => filter_var($request->tersedia, FILTER_VALIDATE_BOOLEAN),
         ]);
     }
+
+    $validated = $request->validate([
+        'nama'      => 'sometimes|required|string|max:255',
+        'jenis'     => 'sometimes|required|string',
+        'ukuran_ml' => 'sometimes|required|integer',
+        'rasa'      => 'sometimes|required|string',
+        'harga'     => 'sometimes|required|numeric',
+        'tersedia'  => 'sometimes|boolean',
+    ]);
+
+    $kopi->update($validated);
+
+    return response()->json([
+        'message' => 'Kopi berhasil diubah',
+        'data'    => new KopiResource($kopi),
+    ]);
+}
 
 
     public function destroy($id)
@@ -97,6 +100,18 @@ class KopiController extends Controller
         return response()->json([
             'message' => 'Kopi berhasil dihapus',
         ]);
+    }
+
+    function generateRandomString($length = 30) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+    
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+    
+        return $randomString;
     }
 }
 
