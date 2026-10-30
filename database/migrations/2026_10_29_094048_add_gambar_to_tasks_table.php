@@ -20,3 +20,6 @@ public function down(): void
     });
 }
 };
+
+
+//jangan lupa follow ig saya buat yang liat ini yaa @rafly_dhana

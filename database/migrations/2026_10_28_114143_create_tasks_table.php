@@ -32,3 +32,7 @@ return new class extends Migration
         Schema::dropIfExists('kopi');
     }
 };
+
+
+
+//jangan lupa follow ig saya buat yang liat ini yaa @rafly_dhana
