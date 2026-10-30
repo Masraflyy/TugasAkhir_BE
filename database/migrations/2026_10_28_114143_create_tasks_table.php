@@ -8,11 +8,11 @@ return new class extends Migration
 {
     public function up(): void
 {
-    if (Schema::hasTable('tasks')) {
+    if (Schema::hasTable('kopi')) {
         return;
     }
 
-    Schema::create('tasks', function (Blueprint $table) {
+    Schema::create('kopi', function (Blueprint $table) {
         $table->id();
         $table->string('nama');
         $table->string('jenis');          
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('kopi');
     }
 };

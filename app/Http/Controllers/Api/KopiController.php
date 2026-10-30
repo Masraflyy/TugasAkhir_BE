@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TaskResource;
-use App\Models\Task;
+use App\Http\Resources\KopiResource;
+use App\Models\Kopi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class TaskController extends Controller
+class KopiController extends Controller
 {
 
     public function index()
     {
-        $data = Task::all();
+        $data = Kopi::all();
 
         return response()->json([
             'message' => 'Kopi berhasil ditampilkan',
@@ -34,29 +34,29 @@ class TaskController extends Controller
         ]);
 
 
-        $task = Task::create($validated);
+        $kopi = Kopi::create($validated);
 
         return response()->json([
             'message' => 'Kopi berhasil ditambahkan',
-            'data'    => new TaskResource($task),
+            'data'    => new KopiResource($kopi),
         ], 201);
     }
 
   
     public function show($id)
     {
-        $task = Task::findOrFail($id);
+        $kopi = Kopi::findOrFail($id);
 
         return response()->json([
             'message' => 'Kopi berhasil ditampilkan',
-            'data'    => new TaskResource($task),
+            'data'    => new KopiResource($kopi),
         ]);
     }
 
 
     public function update(Request $request, $id)
     {
-        $task = Task::findOrFail($id);
+        $kopi = Kopi::findOrFail($id);
 
         $validated = $request->validate([
             'nama'      => 'sometimes|required|string|max:255',
@@ -69,30 +69,30 @@ class TaskController extends Controller
         ]);
 
         if ($request->hasFile('gambar')) {
-            if ($task->gambar) {
-                Storage::disk('public')->delete($task->gambar);
+            if ($kopi->gambar) {
+                Storage::disk('public')->delete($kopi->gambar);
             }
             $validated['gambar'] = $request->file('gambar')->store('kopi', 'public');
         }
 
-        $task->update($validated);
+        $kopi->update($validated);
 
         return response()->json([
             'message' => 'Kopi berhasil diubah',
-            'data'    => new TaskResource($task),
+            'data'    => new KopiResource($kopi),
         ]);
     }
 
 
     public function destroy($id)
     {
-        $task = Task::findOrFail($id);
+        $kopi = Kopi::findOrFail($id);
 
-        if ($task->gambar) {
-            Storage::disk('public')->delete($task->gambar);
+        if ($kopi->gambar) {
+            Storage::disk('public')->delete($kopi->gambar);
         }
 
-        $task->delete();
+        $kopi->delete();
 
         return response()->json([
             'message' => 'Kopi berhasil dihapus',

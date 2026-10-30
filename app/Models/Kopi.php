@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Kopi extends Model
 {
+    protected $table = 'kopi';
     protected $fillable = [
         'nama',
         'jenis',
